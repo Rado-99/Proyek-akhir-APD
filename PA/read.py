@@ -1,6 +1,7 @@
 import storage
 from menu import (format_rupiah, jeda, pesan_error, pesan_info,
-                tampilkan_tabel_karyawan, tampilkan_tabel_statistik)
+                tampilkan_tabel_karyawan, tampilkan_tabel_per_jabatan,
+                tampilkan_tabel_statistik)
 
 def total_gaji(daftar_id):
     "Menjumlahkan gaji semua ID pada daftar_id secara rekursif."
@@ -8,6 +9,13 @@ def total_gaji(daftar_id):
     if len(daftar_id) == 0:
         return 0
     return storage.karyawan[daftar_id[0]]["gaji"] + total_gaji(daftar_id[1:])
+
+def hitung_per_jabatan():
+    """Menghitung jumlah karyawan tiap jabatan, mengembalikan dictionary {jabatan: jumlah}."""
+    per_jabatan = {}
+    for k in storage.karyawan.values():
+        per_jabatan[k["jabatan"]] = per_jabatan.get(k["jabatan"], 0) + 1
+    return per_jabatan
 
 def lihat_karyawan():
     try:
@@ -22,22 +30,29 @@ def lihat_karyawan():
         jeda()
 
 def cari_karyawan():
-    try:
-        kata = input("Cari nama/jabatan: ").strip().lower()
-        if kata == "":
-            raise ValueError("Kata kunci tidak boleh kosong!")
-        hasil = []
-        for id_k, k in storage.karyawan.items():
-            if kata in k["nama"].lower() or kata in k["jabatan"].lower():
-                hasil.append(id_k)
-        if len(hasil) == 0:
-            raise ValueError("Data tidak ditemukan.")
-    except ValueError as e:
-        pesan_error(e)
-    else:
-        tampilkan_tabel_karyawan(hasil, f"HASIL PENCARIAN ({len(hasil)} DATA)")
-    finally:
+    if len(storage.karyawan) == 0:
+        pesan_error("Belum ada data.")
         jeda()
+        return
+    tampilkan_tabel_per_jabatan(hitung_per_jabatan())
+    pesan_info("Tekan Enter untuk ke menu utama")
+    while True:
+        try:
+            kata = input("Cari nama/jabatan: ").strip().lower()
+            if kata == "":
+                return
+            hasil = []
+            for id_k, k in storage.karyawan.items():
+                if kata in k["nama"].lower() or kata in k["jabatan"].lower():
+                    hasil.append(id_k)
+            if len(hasil) == 0:
+                raise ValueError("Data tidak ditemukan.")
+        except ValueError as e:
+            pesan_error(f"{e} Silakan masukkan nama/jabatan yang benar.")
+        else:
+            tampilkan_tabel_karyawan(hasil, f"HASIL PENCARIAN ({len(hasil)} DATA)")
+            jeda()
+            return
 
 def statistik_gaji():
     try:
@@ -54,13 +69,10 @@ def statistik_gaji():
             ("Gaji tertinggi", f"{format_rupiah(storage.karyawan[tertinggi]['gaji'])} - {storage.karyawan[tertinggi]['nama']}"),
             ("Gaji terendah", f"{format_rupiah(storage.karyawan[terendah]['gaji'])} - {storage.karyawan[terendah]['nama']}"),
         ]
-        per_jabatan = {}
-        for k in storage.karyawan.values():
-            per_jabatan[k["jabatan"]] = per_jabatan.get(k["jabatan"], 0) + 1
     except ValueError as e:
         pesan_error(e)
     else:
-        tampilkan_tabel_statistik(baris, per_jabatan)
+        tampilkan_tabel_statistik(baris)
     finally:
         jeda()
 

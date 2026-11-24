@@ -1,7 +1,7 @@
 import pwinput
 
 import storage
-from menu import jeda, pesan_error, pesan_sukses
+from menu import jeda, pesan_error, pesan_info, pesan_sukses
 
 MAKS_PERCOBAAN = 3
 
@@ -42,12 +42,18 @@ def login():
 def register():
     try:
         username = input("Username baru: ").strip()
-        password = pwinput.pwinput("Password baru:").strip()
-        id_teks = input("ID karyawan Anda: ").strip()
-        if username == "" or password == "":
-            raise ValueError("Username dan password tidak boleh kosong!")
+        if username == "":
+            raise ValueError("Username tidak boleh kosong!")
+        if not username.isalpha():
+            raise ValueError("Username hanya boleh berisi huruf (tanpa angka, spasi, atau simbol)!")
         if username in storage.users:
             raise ValueError("Username sudah dipakai!")
+
+        password = pwinput.pwinput("Password baru:").strip()
+        if password == "":
+            raise ValueError("Password tidak boleh kosong!")
+
+        id_teks = input("ID karyawan Anda: ").strip()
         if not id_teks.isdecimal():
             raise ValueError("ID karyawan harus berupa angka!")
         id_k = int(id_teks)
@@ -62,3 +68,44 @@ def register():
         pesan_sukses("Register berhasil, silakan login.")
     finally:
         jeda()
+
+def ubah_password(username):
+    """Mengubah password akun yang sedang login.
+    Kosongkan (Enter) pada isian apa pun untuk kembali ke menu utama."""
+    pesan_info("Tekan Enter pada isian kosong untuk kembali ke menu utama")
+    while True:
+        try:
+            lama = pwinput.pwinput("Password lama:").strip()
+            if lama == "":
+                return
+            if lama != storage.users[username]["password"]:
+                raise ValueError("Password lama salah!")
+        except ValueError as e:
+            pesan_error(f"{e} Silakan masukkan lagi.")
+        else:
+            break
+    while True:
+        try:
+            baru = pwinput.pwinput("Password baru:").strip()
+            if baru == "":
+                return
+            if baru == lama:
+                raise ValueError("Password baru tidak boleh sama dengan password lama!")
+        except ValueError as e:
+            pesan_error(f"{e} Silakan masukkan lagi.")
+        else:
+            break
+    while True:
+        try:
+            konfirmasi = pwinput.pwinput("Ulangi password baru:").strip()
+            if konfirmasi == "":
+                return
+            if konfirmasi != baru:
+                raise ValueError("Konfirmasi password tidak cocok!")
+        except ValueError as e:
+            pesan_error(f"{e} Silakan masukkan lagi.")
+        else:
+            break
+    storage.users[username]["password"] = baru
+    pesan_sukses("Password berhasil diubah.")
+    jeda()

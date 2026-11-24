@@ -1,8 +1,8 @@
 import storage
-from menu import baca_id_berulang, jeda, pesan_info, pesan_sukses, tampilkan_daftar_singkat
+from menu import baca_id_berulang, jeda, pesan_info, pesan_sukses, tampilkan_tabel_karyawan
 
 def hapus_karyawan():
-    tampilkan_daftar_singkat()
+    tampilkan_tabel_karyawan()
     id_hapus = baca_id_berulang()
     if id_hapus is None:
         return

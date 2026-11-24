@@ -1,6 +1,8 @@
 BONUS_JAM_PERTAMA = 100000
 BONUS_JAM_KEDUA = 200000
 
+DAFTAR_JABATAN = {"1": "Manager", "2": "HRD", "3": "Karyawan", "4": "Cleaning Service"}
+
 users = {
     "admin": {"password": "admin123", "role": "admin"},
     "rado": {"password": "rado123", "role": "user", "id_karyawan": 3},

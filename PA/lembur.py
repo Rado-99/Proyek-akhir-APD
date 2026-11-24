@@ -1,9 +1,9 @@
 import storage
 from menu import (baca_id_berulang, format_rupiah, jeda, pesan_error, pesan_info,
-                pesan_sukses, tampilkan_daftar_singkat)
+                pesan_sukses, tampilkan_tabel_karyawan)
 
 def tambah_lembur():
-    tampilkan_daftar_singkat()
+    tampilkan_tabel_karyawan()
     id_k = baca_id_berulang()
     if id_k is None:
         return

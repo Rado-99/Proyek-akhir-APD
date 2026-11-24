@@ -1,5 +1,5 @@
 import storage
-from autentikasi import login, register
+from autentikasi import login, register, ubah_password
 from create import tambah_karyawan
 from delete import hapus_karyawan
 from lembur import tambah_lembur
@@ -33,31 +33,38 @@ def proses_menu_utama():
     if role == "admin":
         daftar_menu = [("1", "Tambah Karyawan"), ("2", "Lihat Karyawan"),
                     ("3", "Ubah Karyawan"), ("4", "Hapus Karyawan"),
-                    ("5", "Cari Karyawan"), ("6", "Statistik Gaji"),
+                    ("5", "Cari Karyawan"), ("6", "Laporan Gaji Karyawan"),
                     ("7", "Catat Lembur"), ("0", "Logout")]
     else:
-        daftar_menu = [("1", "Lihat Data Saya"), ("0", "Logout")]
+        daftar_menu = [("1", "Lihat Data Saya"), ("2", "Ubah Password"), ("0", "Logout")]
     tampilkan_menu(f"MENU ({user_aktif} - {role})", daftar_menu)
     pilih = input("Pilih: ").strip()
 
+    nomor_valid = [nomor for nomor, nama in daftar_menu if nomor != "0"]
+
     if pilih == "0":
         user_aktif = None
-    elif role == "user" and pilih == "1":
-        lihat_data_sendiri(user_aktif)
-    elif role == "admin" and pilih == "1":
-        tambah_karyawan()
-    elif role == "admin" and pilih == "2":
-        lihat_karyawan()
-    elif role == "admin" and pilih == "3":
-        ubah_karyawan()
-    elif role == "admin" and pilih == "4":
-        hapus_karyawan()
-    elif role == "admin" and pilih == "5":
-        cari_karyawan()
-    elif role == "admin" and pilih == "6":
-        statistik_gaji()
-    elif role == "admin" and pilih == "7":
-        tambah_lembur()
+    elif pilih in nomor_valid:
+        bersihkan_layar()
+        if role == "user":
+            if pilih == "1":
+                lihat_data_sendiri(user_aktif)
+            elif pilih == "2":
+                ubah_password(user_aktif)
+        elif pilih == "1":
+            tambah_karyawan()
+        elif pilih == "2":
+            lihat_karyawan()
+        elif pilih == "3":
+            ubah_karyawan()
+        elif pilih == "4":
+            hapus_karyawan()
+        elif pilih == "5":
+            cari_karyawan()
+        elif pilih == "6":
+            statistik_gaji()
+        elif pilih == "7":
+            tambah_lembur()
     else:
         pesan_error("Pilihan tidak valid!")
         jeda()

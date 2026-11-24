@@ -25,6 +25,10 @@ def pesan_error(teks):
 def pesan_info(teks):
     print(Fore.YELLOW + str(teks))
 
+def cetak_tabel(tabel):
+    """Mencetak tabel PrettyTable dengan warna cyan."""
+    print(Fore.CYAN + tabel.get_string())
+
 def tampilkan_menu(judul, daftar_menu):
     """Menampilkan menu dalam bentuk tabel. daftar_menu berisi pasangan (nomor, nama)."""
     tabel = PrettyTable()
@@ -33,7 +37,7 @@ def tampilkan_menu(judul, daftar_menu):
     tabel.align["Menu"] = "l"
     for nomor, nama in daftar_menu:
         tabel.add_row([nomor, nama])
-    print(tabel)
+    cetak_tabel(tabel)
 
 def tampilkan_tabel_karyawan(daftar_id=None, judul="DATA KARYAWAN"):
     """Menampilkan karyawan dalam tabel. daftar_id berisi ID yang ditampilkan (None = semua)."""
@@ -54,7 +58,7 @@ def tampilkan_tabel_karyawan(daftar_id=None, judul="DATA KARYAWAN"):
         tabel.add_row([id_k, k["nama"], k["jabatan"], format_rupiah(k["gaji"]),
                     f"{jam:g} jam", format_rupiah(bonus),
                     format_rupiah(k["gaji"] + bonus)])
-    print(tabel)
+    cetak_tabel(tabel)
 
 def tampilkan_daftar_singkat():
     tabel = PrettyTable()
@@ -62,27 +66,28 @@ def tampilkan_daftar_singkat():
     tabel.align["Nama"] = "l"
     for id_k, k in storage.karyawan.items():
         tabel.add_row([id_k, k["nama"]])
-    print(tabel)
+    cetak_tabel(tabel)
 
-def tampilkan_tabel_statistik(baris, per_jabatan):
-    """Menampilkan statistik gaji. baris berisi pasangan (keterangan, nilai),
-    per_jabatan adalah dictionary {jabatan: jumlah}."""
+def tampilkan_tabel_statistik(baris):
+    """Menampilkan statistik gaji. baris berisi pasangan (keterangan, nilai)."""
     tabel = PrettyTable()
-    tabel.title = "STATISTIK GAJI"
+    tabel.title = "LAPORAN GAJI KARYAWAN"
     tabel.field_names = ["Keterangan", "Nilai"]
     tabel.align["Keterangan"] = "l"
     tabel.align["Nilai"] = "r"
     for keterangan, nilai in baris:
         tabel.add_row([keterangan, nilai])
-    print(tabel)
+    cetak_tabel(tabel)
 
-    tabel_jabatan = PrettyTable()
-    tabel_jabatan.title = "KARYAWAN PER JABATAN"
-    tabel_jabatan.field_names = ["Jabatan", "Jumlah"]
-    tabel_jabatan.align["Jabatan"] = "l"
+def tampilkan_tabel_per_jabatan(per_jabatan):
+    """Menampilkan jumlah karyawan per jabatan. per_jabatan adalah dictionary {jabatan: jumlah}."""
+    tabel = PrettyTable()
+    tabel.title = "KARYAWAN PER JABATAN"
+    tabel.field_names = ["Jabatan", "Jumlah"]
+    tabel.align["Jabatan"] = "l"
     for jabatan, jumlah in per_jabatan.items():
-        tabel_jabatan.add_row([jabatan, f"{jumlah} orang"])
-    print(tabel_jabatan)
+        tabel.add_row([jabatan, f"{jumlah} orang"])
+    cetak_tabel(tabel)
 
 def baca_id_berulang():
     """Meminta ID karyawan terus-menerus sampai benar.
