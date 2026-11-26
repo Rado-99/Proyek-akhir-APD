@@ -20,15 +20,16 @@ def baca_jabatan():
     """Menampilkan pilihan jabatan lalu meminta pilihan terus-menerus sampai benar.
     Kosongkan (Enter) untuk membatalkan, fungsi mengembalikan None."""
     tampilkan_menu("PILIHAN JABATAN", list(storage.DAFTAR_JABATAN.items()))
+    batas = len(storage.DAFTAR_JABATAN)
     while True:
         try:
-            pilih = input("Pilih jabatan (1-4): ").strip()
+            pilih = input(f"Pilih jabatan (1-{batas}): ").strip()
             if pilih == "":
                 return None
             if pilih not in storage.DAFTAR_JABATAN:
                 raise ValueError("Pilihan jabatan tidak valid!")
         except ValueError as e:
-            pesan_error(f"{e} Silakan pilih angka 1-4.")
+            pesan_error(f"{e} Silakan pilih angka 1-{batas}.")
         else:
             return storage.DAFTAR_JABATAN[pilih]
 

@@ -1,7 +1,7 @@
 BONUS_JAM_PERTAMA = 100000
 BONUS_JAM_KEDUA = 200000
 
-DAFTAR_JABATAN = {"1": "Manager", "2": "HRD", "3": "Karyawan", "4": "Cleaning Service"}
+DAFTAR_JABATAN = {"1": "Manager", "2": "HRD", "3": "Karyawan", "4": "Cleaning Service", "5": "Programmer"}
 
 users = {
     "admin": {"password": "admin123", "role": "admin"},
@@ -10,7 +10,7 @@ users = {
 
 karyawan = {
     1: {"nama": "Andi Pratama", "jabatan": "Manager", "gaji": 12000000},
-    2: {"nama": "Ahmad Rizki", "jabatan": "Staff", "gaji": 6000000},
+    2: {"nama": "Ahmad Rizki", "jabatan": "Karyawan", "gaji": 6000000},
     3: {"nama": "Rudi", "jabatan": "Programmer", "gaji": 8000000},
 }
 
