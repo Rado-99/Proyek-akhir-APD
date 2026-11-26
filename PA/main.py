@@ -77,4 +77,4 @@ if __name__ == "__main__":
             proses_menu_utama()
 
     bersihkan_layar()
-    print("Terima kasih!")
+    print("Terima kasiih!")
